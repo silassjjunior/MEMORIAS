@@ -14,7 +14,17 @@ export default defineConfig({
     host: true,
     port: 5173,
     strictPort: true,
-    // ✅ Adiciona o host do ngrok aqui
-    allowedHosts: ['7daa4a9e330d.ngrok-free.app']
+    allowedHosts: ['7daa4a9e330d.ngrok-free.app'],
+  },
+  build: {
+    rollupOptions: {
+      // ✅ Faz o Vite ignorar o "konva" durante o bundle (corrige o erro da Vercel)
+      external: ['konva'],
+    },
+    outDir: 'dist',
+    sourcemap: false,
+    emptyOutDir: true,
+    // ⚙️ opcional mas ajuda a builds limpos em produção
+    chunkSizeWarningLimit: 1000,
   },
 })
