@@ -10,21 +10,14 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  server: {
-    host: true,
-    port: 5173,
-    strictPort: true,
-    allowedHosts: ['7daa4a9e330d.ngrok-free.app'],
-  },
   build: {
     rollupOptions: {
-      // ✅ Faz o Vite ignorar o "konva" durante o bundle (corrige o erro da Vercel)
+      // Ignora konva na hora do bundle
       external: ['konva'],
     },
     outDir: 'dist',
-    sourcemap: false,
     emptyOutDir: true,
-    // ⚙️ opcional mas ajuda a builds limpos em produção
+    sourcemap: false,
     chunkSizeWarningLimit: 1000,
   },
 })
