@@ -11,10 +11,6 @@ export default defineConfig({
     },
   },
   build: {
-    rollupOptions: {
-      // Ignora konva na hora do bundle
-      external: ['konva'],
-    },
     outDir: 'dist',
     emptyOutDir: true,
     sourcemap: false,
