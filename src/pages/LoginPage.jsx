@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
+
 // Esquema de validação
 const loginSchema = z.object({
   email: z.string().min(1, "E-mail é obrigatório").email("E-mail inválido"),
@@ -67,13 +68,16 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* LOGO + TITULO */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl mb-4 shadow-lg">
-            <span className="text-3xl font-bold text-white">M</span>
+          <div className="inline-flex items-center justify-center w-20 h-20 mb-4 scale-200">
+  
+          <img src="/favicon.ico" alt="M" className="w-8 h-8" />
+
+
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             MEMÓRIAS
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-600 dark:text-gray-800">
             Todas as suas memórias em um só lugar
           </p>
         </div>
@@ -191,7 +195,7 @@ export default function LoginPage() {
         </div>
 
         {/* FOOTER */}
-        <p className="text-center text-sm text-gray-500 dark:text-gray-500 mt-8">
+        <p className="text-center text-sm text-gray-500 dark:text-gray-800 mt-8">
           © 2025 MEMÓRIAS. Todos os direitos reservados.
         </p>
       </div>
