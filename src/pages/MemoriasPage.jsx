@@ -7,22 +7,22 @@ import { useNavigate } from "react-router-dom";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 
-// ✅ Cartão visual com até 3 imagens de fundo
+// ✅ Cartão visual com até 3 imagens/vídeos de fundo
 const MemoryCard = ({ title, type, eventId, chaveId, onClick, coverImageUrl }) => {
-  const [images, setImages] = useState([]);
+  const [medias, setMedias] = useState([]);
   const [init, setInit] = useState(false);
 
   useEffect(() => {
-    // inicializa partículas
+    // Inicializa partículas
     initParticlesEngine(async (engine) => {
       await loadSlim(engine);
     }).then(() => setInit(true));
   }, []);
 
   useEffect(() => {
-    const fetchImages = async () => {
+    const fetchMedias = async () => {
       if (!eventId && !chaveId) return;
-      let query = supabase.from("memories").select("file_url");
+      let query = supabase.from("memories").select("file_url, type");
 
       if (type === "feed") {
         query = query
@@ -44,11 +44,10 @@ const MemoryCard = ({ title, type, eventId, chaveId, onClick, coverImageUrl }) =
       }
 
       const { data, error } = await query;
-      if (!error && data) setImages(data);
+      if (!error && data) setMedias(data);
     };
 
-    // Só busca memórias se não houver cover_image_url (para evitar sobreposição)
-    if (!coverImageUrl) fetchImages();
+    if (!coverImageUrl) fetchMedias();
   }, [eventId, chaveId, type, coverImageUrl]);
 
   // ✨ Configuração de partículas suaves
@@ -86,7 +85,7 @@ const MemoryCard = ({ title, type, eventId, chaveId, onClick, coverImageUrl }) =
       onClick={onClick}
       className="relative w-full h-52 sm:h-56 rounded-2xl overflow-hidden shadow-lg hover:scale-[1.02] transition-transform duration-300 cursor-pointer"
     >
-      {/* Fundo com prioridade: coverImageUrl > imagens de memória > partículas */}
+      {/* Fundo com prioridade: coverImageUrl > mídias de memória > partículas */}
       <div className="absolute inset-0 flex">
         {coverImageUrl ? (
           <div
@@ -97,17 +96,30 @@ const MemoryCard = ({ title, type, eventId, chaveId, onClick, coverImageUrl }) =
               backgroundPosition: "center",
             }}
           />
-        ) : images.length > 0 ? (
-          images.map((img, i) => (
-            <div
-              key={i}
-              className="flex-1 h-full"
-              style={{
-                backgroundImage: `url(${img.file_url})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            />
+        ) : medias.length > 0 ? (
+          medias.map((media, i) => (
+            <div key={i} className="flex-1 relative h-full">
+              {media.type === "video" ? (
+                <video
+                  src={media.file_url}
+                  className="w-full h-full object-cover"
+                  playsInline
+                  muted
+                  loop
+                  autoPlay
+                  style={{ aspectRatio: "auto" }}
+                />
+              ) : (
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: `url(${media.file_url})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                />
+              )}
+            </div>
           ))
         ) : (
           <div className="absolute inset-0 bg-card">
@@ -127,7 +139,7 @@ const MemoryCard = ({ title, type, eventId, chaveId, onClick, coverImageUrl }) =
         <h2 className="text-foreground text-xl sm:text-2xl font-bold drop-shadow-md">
           {title}
         </h2>
-        {!coverImageUrl && images.length === 0 && (
+        {!coverImageUrl && medias.length === 0 && (
           <p className="text-sm sm:text-base text-muted-foreground mt-1 opacity-80">
             {emptySubtitle}
           </p>
@@ -252,7 +264,6 @@ const MemoriasPage = () => {
           <p className="text-center text-muted-foreground">Carregando...</p>
         ) : (
           <>
-            {/* 🟦 Aqui entra a condicional do cover_image_url */}
             <MemoryCard
               title="FEED DO EVENTO"
               type="feed"

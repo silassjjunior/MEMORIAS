@@ -123,6 +123,12 @@ const Favoritos = () => {
     }
   };
 
+  // --- Detectar tipo de mídia
+  const isVideo = (url) => {
+    const videoExtensions = [".mp4", ".webm", ".ogg", ".mov"];
+    return videoExtensions.some((ext) => url.toLowerCase().includes(ext));
+  };
+
   return (
     <div className="min-h-screen bg-background dark:bg-background-dark text-foreground dark:text-foreground-dark flex flex-col items-center transition-colors duration-300">
       
@@ -155,12 +161,23 @@ const Favoritos = () => {
               layout
               onClick={() => setZoomMemory(memory)}
             >
-              {/* Imagem adaptativa */}
-              <img
-                src={memory.file_url}
-                alt={memory.legenda || "Imagem"}
-                className="w-full h-auto max-h-[90vh] object-contain"
-              />
+              {/* Mídia adaptativa */}
+              {isVideo(memory.file_url) ? (
+                <video
+                  src={memory.file_url}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-auto max-h-[90vh] object-contain"
+                />
+              ) : (
+                <img
+                  src={memory.file_url}
+                  alt={memory.legenda || "Imagem"}
+                  className="w-full h-auto max-h-[90vh] object-contain"
+                />
+              )}
 
               {/* Legenda e interações */}
               <div className="p-4">
@@ -222,11 +239,23 @@ const Favoritos = () => {
             exit={{ opacity: 0 }}
             onClick={() => setZoomMemory(null)}
           >
-            <img
-              src={zoomMemory.file_url}
-              alt={zoomMemory.legenda || "Zoom"}
-              className="max-h-[90vh] max-w-full object-contain rounded-lg"
-            />
+            {isVideo(zoomMemory.file_url) ? (
+              <video
+                src={zoomMemory.file_url}
+                controls
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="max-h-[90vh] max-w-full object-contain rounded-lg"
+              />
+            ) : (
+              <img
+                src={zoomMemory.file_url}
+                alt={zoomMemory.legenda || "Zoom"}
+                className="max-h-[90vh] max-w-full object-contain rounded-lg"
+              />
+            )}
             <button
               className="absolute top-4 right-4 text-white text-2xl"
               onClick={() => setZoomMemory(null)}

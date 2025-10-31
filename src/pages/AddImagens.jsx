@@ -45,7 +45,7 @@ const AddImagens = () => {
 
   const handleUpload = async () => {
     if (!files.length) {
-      alert('Selecione ao menos uma imagem!')
+      alert('Selecione ao menos um arquivo!')
       return
     }
     if (!eventId) {
@@ -54,7 +54,7 @@ const AddImagens = () => {
     }
 
     setIsUploading(true)
-    setStatusMessage(`Enviando ${files.length} imagens...`)
+    setStatusMessage(`Enviando ${files.length} arquivo(s)...`)
 
     try {
       for (let i = 0; i < files.length; i++) {
@@ -94,7 +94,7 @@ const AddImagens = () => {
       setFiles([])
     } catch (err) {
       console.error('Erro no upload:', err.message)
-      setStatusMessage('❌ Erro ao enviar imagens')
+      setStatusMessage('❌ Erro ao enviar arquivos')
     } finally {
       setIsUploading(false)
     }
@@ -102,11 +102,11 @@ const AddImagens = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-background dark:bg-background-dark p-6 pt-16 text-foreground dark:text-foreground-dark">
-      <h1 className="text-2xl font-bold mb-6 text-center">Upload de Imagens</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center">Upload de Arquivos</h1>
 
       <input
         type="file"
-        accept="image/*"
+        accept="image/*,video/*"
         multiple
         onChange={handleFileChange}
         className="hidden"
@@ -116,14 +116,18 @@ const AddImagens = () => {
         htmlFor="fileInput"
         className="cursor-pointer bg-primary dark:bg-primary-dark text-white px-6 py-3 rounded-lg shadow hover:bg-primary-hover dark:hover:bg-primary-hover-dark transition"
       >
-        Selecionar Imagens
+        Selecionar Arquivos
       </label>
 
       {files.length > 0 && (
         <div className="mt-4 grid grid-cols-3 gap-2">
           {files.map((f, idx) => (
             <div key={idx} className="relative w-full aspect-square rounded-lg overflow-hidden shadow-md">
-              <img src={f.preview} alt={`preview-${idx}`} className="w-full h-full object-cover"/>
+              {f.file.type.startsWith('image/') ? (
+                <img src={f.preview} alt={`preview-${idx}`} className="w-full h-full object-cover"/>
+              ) : (
+                <video src={f.preview} controls className="w-full h-full object-cover"/>
+              )}
             </div>
           ))}
         </div>
@@ -160,7 +164,7 @@ const AddImagens = () => {
           disabled={isUploading}
           className="mt-6 w-full max-w-xs bg-primary dark:bg-primary-dark text-white px-6 py-3 rounded-lg shadow hover:bg-primary-hover dark:hover:bg-primary-hover-dark transition disabled:opacity-50"
         >
-          {isUploading ? 'Enviando...' : 'Enviar Imagens'}
+          {isUploading ? 'Enviando...' : 'Enviar Arquivos'}
         </button>
       )}
 

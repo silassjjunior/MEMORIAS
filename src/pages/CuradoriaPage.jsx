@@ -20,7 +20,7 @@ const CuradoriaPage = () => {
     design_url: null,
   });
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("all"); // all | featured | not_featured
+  const [filter, setFilter] = useState("all");
   const [viewMode, setViewMode] = useState("full");
   const navigate = useNavigate();
 
@@ -59,7 +59,7 @@ const CuradoriaPage = () => {
       const { data: memoriesData, error: memoriesError } = await supabase
         .from("memories")
         .select(`
-          id, file_url, legenda, featured, created_at,
+          id, file_url, legenda, featured, created_at, file_type,
           uploader:uploader_id(id, username, avatar_url)
         `)
         .eq("event_id", chaveData.event_id)
@@ -124,6 +124,10 @@ const CuradoriaPage = () => {
     }
   };
 
+  // 🔹 Verifica se é vídeo
+  const isVideo = (fileUrl) =>
+    fileUrl?.match(/\.(mp4|mov|webm|ogg)$/i);
+
   return (
     <div className="min-h-screen bg-background dark:bg-background-dark text-foreground dark:text-foreground-dark transition-colors duration-300 flex flex-col">
       {/* HEADER */}
@@ -152,36 +156,25 @@ const CuradoriaPage = () => {
         <div className="flex items-center justify-between mt-3">
           {/* Filtro */}
           <div className="flex gap-2">
-            <button
-              onClick={() => setFilter("all")}
-              className={`px-3 py-1 rounded-full text-sm ${
-                filter === "all"
-                  ? "bg-primary text-white"
-                  : "bg-gray-200 dark:bg-gray-700"
-              }`}
-            >
-              Todas
-            </button>
-            <button
-              onClick={() => setFilter("featured")}
-              className={`px-3 py-1 rounded-full text-sm ${
-                filter === "featured"
-                  ? "bg-yellow-400 text-black"
-                  : "bg-gray-200 dark:bg-gray-700"
-              }`}
-            >
-              Favoritas
-            </button>
-            <button
-              onClick={() => setFilter("not_featured")}
-              className={`px-3 py-1 rounded-full text-sm ${
-                filter === "not_featured"
-                  ? "bg-gray-800 text-white"
-                  : "bg-gray-200 dark:bg-gray-700"
-              }`}
-            >
-              Não favoritas
-            </button>
+            {[
+              { key: "all", label: "Todas" },
+              { key: "featured", label: "Favoritas" },
+              { key: "not_featured", label: "Não favoritas" },
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setFilter(key)}
+                className={`px-3 py-1 rounded-full text-sm ${
+                  filter === key
+                    ? key === "featured"
+                      ? "bg-yellow-400 text-black"
+                      : "bg-primary text-white"
+                    : "bg-gray-200 dark:bg-gray-700"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
 
           {/* Visualização */}
@@ -221,25 +214,33 @@ const CuradoriaPage = () => {
             {filteredMemories.map((memory) => (
               <div
                 key={memory.id}
-                className={`relative rounded-2xl overflow-hidden group shadow-md ${
+                className={`relative rounded-2xl overflow-hidden group shadow-md bg-black/5 ${
                   memory.featured ? "ring-4 ring-yellow-400" : ""
                 }`}
               >
-                <img
-                  src={memory.file_url}
-                  alt={memory.legenda || "Imagem"}
-                  className={`object-cover w-full ${
-                    viewMode === "full"
-                      ? "h-80"
-                      : viewMode === "medium"
-                      ? "h-48"
-                      : "h-32"
-                  }`}
-                />
+                {/* Mídia responsiva com proporção original */}
+                <div className="w-full relative flex justify-center items-center bg-black">
+                  {isVideo(memory.file_url) ? (
+                    <video
+                      src={memory.file_url}
+                      muted
+                      autoPlay
+                      loop
+                      playsInline
+                      className="max-w-full max-h-[80vh] object-contain"
+                    />
+                  ) : (
+                    <img
+                      src={memory.file_url}
+                      alt={memory.legenda || "Imagem"}
+                      className="max-w-full max-h-[80vh] object-contain"
+                    />
+                  )}
+                </div>
 
-                {/* Overlay do uploader e botão de destaque */}
+                {/* Overlay */}
                 <div className="absolute inset-0 flex flex-col justify-between p-3 opacity-0 group-hover:opacity-100 transition bg-gradient-to-t from-black/60 via-black/20 to-transparent">
-                  {/* Parte de cima: Favoritar */}
+                  {/* Favoritar */}
                   <button
                     onClick={() => toggleFeatured(memory)}
                     className="self-end bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition"
@@ -256,7 +257,7 @@ const CuradoriaPage = () => {
                     )}
                   </button>
 
-                  {/* Parte de baixo: Info */}
+                  {/* Info */}
                   {viewMode === "full" && (
                     <div className="flex items-center justify-between text-white text-xs bg-black/40 p-2 rounded-xl backdrop-blur-sm">
                       <div className="flex items-center gap-2">

@@ -14,8 +14,9 @@ const Feed = ({ tipo }) => {
   const [commentModalMemory, setCommentModalMemory] = useState(null)
   const [newComment, setNewComment] = useState("")
   const commentsInterval = useRef(null)
+  const videoRefs = useRef({})
 
-  // --- 🔁 Busca inicial (com prevenção de recarregar desnecessário)
+  // --- 🔁 Busca inicial
   useEffect(() => {
     if (!chaveId && tipo !== "geral") return
     fetchMemories()
@@ -23,7 +24,7 @@ const Feed = ({ tipo }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chaveId])
 
-  // --- 🚀 Função principal de busca
+  // --- 🚀 Buscar memórias
   const fetchMemories = async () => {
     try {
       setLoading(!loadedOnce)
@@ -45,18 +46,24 @@ const Feed = ({ tipo }) => {
           .eq("id", chaveId)
           .single()
         if (chaveError) throw chaveError
-
         query = query.eq("event_id", chaveData.event_id).eq("shared_to_event", true)
       }
 
-      if (tipo === "minhas") {
-        query = query.eq("chave_id", chaveId)
-      }
+      if (tipo === "minhas") query = query.eq("chave_id", chaveId)
 
       const { data, error } = await query
       if (error) throw error
 
-      setMemories(data || [])
+      // 🔧 Mantém proporção detectada anteriormente
+      setMemories((prev) => {
+        const aspectMap = Object.fromEntries(prev.map((m) => [m.id, m.aspect || "square"]))
+        const formatted = (data || []).map((m) => ({
+          ...m,
+          aspect: aspectMap[m.id] || "square",
+        }))
+        return formatted
+      })
+
       setLoadedOnce(true)
     } catch (err) {
       console.error("Erro ao carregar feed:", err)
@@ -65,7 +72,7 @@ const Feed = ({ tipo }) => {
     }
   }
 
-  // --- 💬 Busca e atualização dos comentários de uma memória
+  // --- 💬 Atualiza comentários
   const fetchCommentsForMemory = async (memoryId) => {
     const { data, error } = await supabase
       .from("comments")
@@ -73,14 +80,11 @@ const Feed = ({ tipo }) => {
       .eq("memorie_id", memoryId)
       .order("created_at", { ascending: true })
 
-    if (!error) {
-      setCommentModalMemory((prev) => ({ ...prev, comments: data }))
-    }
+    if (!error) setCommentModalMemory((prev) => ({ ...prev, comments: data }))
   }
 
   const handleAddComment = async (memoryId) => {
     if (!user || !newComment.trim()) return
-
     try {
       await supabase.from("comments").insert({
         content: newComment,
@@ -99,7 +103,6 @@ const Feed = ({ tipo }) => {
   // --- ❤️ Curtidas
   const handleToggleLike = async (memoryId, liked) => {
     if (!user) return
-
     try {
       if (liked) {
         await supabase
@@ -113,19 +116,16 @@ const Feed = ({ tipo }) => {
           memorie_id: memoryId,
         })
       }
-
-      // Atualiza silenciosamente (sem mostrar "carregando")
       fetchMemories()
     } catch (err) {
       console.error("Erro ao atualizar like:", err)
     }
   }
 
-  // --- 💬 Modal de comentários
+  // --- 💬 Modal
   const openCommentsModal = (memorie) => {
     setCommentModalMemory(memorie)
     fetchCommentsForMemory(memorie.id)
-
     commentsInterval.current = setInterval(() => {
       fetchCommentsForMemory(memorie.id)
     }, 3000)
@@ -136,17 +136,37 @@ const Feed = ({ tipo }) => {
     clearInterval(commentsInterval.current)
   }
 
+  // --- 🎥 AutoPlay inteligente (somente se visível na tela)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const video = entry.target
+          if (video.tagName !== "VIDEO") return
+          if (entry.isIntersecting) {
+            video.play().catch(() => {})
+          } else {
+            video.pause()
+          }
+        })
+      },
+      { threshold: 0.6 }
+    )
+
+    Object.values(videoRefs.current).forEach((v) => {
+      if (v) observer.observe(v)
+    })
+
+    return () => observer.disconnect()
+  }, [memories])
+
   // --- 🧭 Renderização
   return (
-    <div className="min-h-screen bg-background dark:bg-background-dark text-foreground dark:text-foreground-dark p-4 transition-colors duration-300">
+    <div className="min-h-screen bg-background text-foreground p-4 mb-14">
       {loading && !loadedOnce ? (
-        <div className="text-center text-gray-500 dark:text-gray-400 animate-pulse">
-          Carregando feed...
-        </div>
+        <div className="text-center text-gray-500 animate-pulse">Carregando feed...</div>
       ) : memories.length === 0 ? (
-        <div className="text-center text-gray-500 dark:text-gray-400">
-          Nenhuma memória encontrada.
-        </div>
+        <div className="text-center text-gray-500">Nenhuma memória encontrada.</div>
       ) : (
         <motion.div
           className="space-y-6"
@@ -156,13 +176,22 @@ const Feed = ({ tipo }) => {
         >
           {memories.map((memorie) => {
             const liked = memorie.likes?.some((like) => like.user_id === user?.id)
+            const isVideo = memorie.file_url.match(/\.(mp4|webm|ogg)$/i)
+
+            const aspectClass =
+              memorie.aspect === "horizontal"
+                ? "aspect-video"
+                : memorie.aspect === "vertical"
+                ? "aspect-[9/16]"
+                : "aspect-square"
 
             return (
               <motion.div
                 key={memorie.id}
                 layout
-                className="p-4 bg-card dark:bg-card-dark rounded-2xl shadow transition-transform hover:scale-[1.01]"
+                className="p-4 bg-card rounded-2xl shadow transition-transform hover:scale-[1.01]"
               >
+                {/* Header */}
                 <div className="flex items-center mb-2">
                   <img
                     src={memorie.uploader.avatar_url || "/default-avatar.png"}
@@ -177,16 +206,71 @@ const Feed = ({ tipo }) => {
                   </div>
                 </div>
 
-                <img
-                  src={memorie.file_url}
-                  alt="Memória"
-                  className="w-full h-72 sm:h-96 object-cover rounded-2xl mb-2"
-                />
+                {/* Mídia com proporção dinâmica */}
+                <div className={`w-full ${aspectClass} overflow-hidden rounded-2xl mb-2`}>
+                  {isVideo ? (
+                    <video
+                      ref={(el) => (videoRefs.current[memorie.id] = el)}
+                      src={memorie.file_url}
+                      className="w-full h-full object-cover"
+                      muted
+                      playsInline
+                      loop
+                      preload="metadata"
+                      onLoadedMetadata={(e) => {
+                        const vid = e.target
+                        const aspect = vid.videoWidth / vid.videoHeight
+                        setMemories((prev) =>
+                          prev.map((m) =>
+                            m.id === memorie.id
+                              ? {
+                                  ...m,
+                                  aspect:
+                                    aspect > 1.2
+                                      ? "horizontal"
+                                      : aspect < 0.9
+                                      ? "vertical"
+                                      : "square",
+                                }
+                              : m
+                          )
+                        )
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src={memorie.file_url}
+                      alt="Memória"
+                      className="w-full h-full object-cover"
+                      onLoad={(e) => {
+                        const img = e.target
+                        const aspect = img.naturalWidth / img.naturalHeight
+                        setMemories((prev) =>
+                          prev.map((m) =>
+                            m.id === memorie.id
+                              ? {
+                                  ...m,
+                                  aspect:
+                                    aspect > 1.2
+                                      ? "horizontal"
+                                      : aspect < 0.9
+                                      ? "vertical"
+                                      : "square",
+                                }
+                              : m
+                          )
+                        )
+                      }}
+                    />
+                  )}
+                </div>
 
+                {/* Legenda */}
                 {memorie.legenda && (
-                  <p className="mb-2 text-gray-800 dark:text-gray-200">{memorie.legenda}</p>
+                  <p className="mb-2 text-gray-800">{memorie.legenda}</p>
                 )}
 
+                {/* Likes e comentários */}
                 <div className="flex justify-between text-sm text-muted-foreground items-center">
                   <button
                     className="flex items-center space-x-1"
@@ -259,7 +343,7 @@ const Feed = ({ tipo }) => {
                 <input
                   type="text"
                   placeholder="Adicione um comentário..."
-                  className="flex-1 p-3 rounded-2xl border border-border dark:border-border-dark bg-background dark:bg-background-dark focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-dark text-white"
+                  className="flex-1 p-3 rounded-2xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary text-white"
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   onKeyDown={(e) => {
@@ -267,7 +351,7 @@ const Feed = ({ tipo }) => {
                   }}
                 />
                 <button
-                  className="px-4 py-2 bg-primary dark:bg-primary-dark text-white rounded-2xl font-bold hover:bg-primary-hover dark:hover:bg-primary-hover-dark transition"
+                  className="px-4 py-2 bg-primary text-white rounded-2xl font-bold hover:bg-primary-hover transition"
                   onClick={() => handleAddComment(commentModalMemory.id)}
                 >
                   Enviar
