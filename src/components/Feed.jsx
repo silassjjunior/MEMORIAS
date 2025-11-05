@@ -267,7 +267,7 @@ const Feed = ({ tipo }) => {
 
                 {/* Legenda */}
                 {memorie.legenda && (
-                  <p className="mb-2 text-gray-800">{memorie.legenda}</p>
+                  <p className="mb-2">{memorie.legenda}</p>
                 )}
 
                 {/* Likes e comentários */}
