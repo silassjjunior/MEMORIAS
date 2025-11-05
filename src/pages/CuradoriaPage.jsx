@@ -59,7 +59,7 @@ const CuradoriaPage = () => {
       const { data: memoriesData, error: memoriesError } = await supabase
         .from("memories")
         .select(`
-          id, file_url, legenda, featured, created_at, file_type,
+          id, file_url, legenda, featured, created_at, type,
           uploader:uploader_id(id, username, avatar_url)
         `)
         .eq("event_id", chaveData.event_id)

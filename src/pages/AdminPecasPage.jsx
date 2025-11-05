@@ -17,7 +17,7 @@ export default function AdminPecasPage() {
   const [camada, setCamada] = useState("BASE");
   const [colecaoSelecionada, setColecaoSelecionada] = useState("");
   const [arquivo, setArquivo] = useState(null);
-  const [quantidade, setQuantidade] = useState(1);
+  const [quantidade, setQuantidade] = useState(0);
   const [quantidadeMaxima, setQuantidadeMaxima] = useState(100);
 
   // Formulário de coleção
@@ -102,7 +102,7 @@ export default function AdminPecasPage() {
             codigo: codigoPeca,
             nome: nomePeca,
             colecao: colecaoSelecionada,
-            raridade,
+            raridade: raridade,
             camada,
             descricao,
             url: imageUrl,
@@ -123,7 +123,7 @@ export default function AdminPecasPage() {
       setColecaoSelecionada("");
       setArquivo(null);
       setPreviewUrl(null);
-      setQuantidade(1);
+      setQuantidade(0);
       setQuantidadeMaxima(100);
 
       alert("✅ Peça criada com sucesso!");
@@ -264,17 +264,9 @@ export default function AdminPecasPage() {
           >
             <option value="comum">Comum</option>
             <option value="raro">Raro</option>
-            <option value="epico">Épico</option>
-            <option value="lendario">Lendário</option>
+            <option value="épico">Épico</option>
+            <option value="lendário">Lendário</option>
           </select>
-          <input
-            type="number"
-            placeholder="Quantidade inicial"
-            value={quantidade}
-            onChange={(e) => setQuantidade(Number(e.target.value))}
-            className="border rounded p-2 bg-gray-700 border-gray-600"
-            min={0}
-          />
           <input
             type="number"
             placeholder="Quantidade máxima"
