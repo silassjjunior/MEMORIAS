@@ -88,7 +88,7 @@ const MemoryCard = ({ title, type, eventId, chaveId, onClick, coverImageUrl }) =
     detectRetina: true,
   };
 
-  const emptySubtitle = "Nenhuma memória adicionada ainda.";
+  const emptySubtitle = "Nenhuma imagem adicionada ainda.";
 
   return (
     <div
