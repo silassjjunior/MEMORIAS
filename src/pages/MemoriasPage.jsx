@@ -7,13 +7,13 @@ import { useNavigate } from "react-router-dom";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 
-// ✅ Cartão visual com até 3 imagens/vídeos de fundo
+// ✅ Cartão visual com até 3 imagens de fundo (sem vídeos)
 const MemoryCard = ({ title, type, eventId, chaveId, onClick, coverImageUrl }) => {
   const [medias, setMedias] = useState([]);
   const [init, setInit] = useState(false);
 
   useEffect(() => {
-    // Inicializa partículas
+    // Inicializa partículas (somente uma vez)
     initParticlesEngine(async (engine) => {
       await loadSlim(engine);
     }).then(() => setInit(true));
@@ -29,22 +29,32 @@ const MemoryCard = ({ title, type, eventId, chaveId, onClick, coverImageUrl }) =
           .eq("event_id", eventId)
           .eq("featured", true)
           .order("created_at", { ascending: false })
-          .limit(3);
+          .limit(10);
       } else if (type === "memories") {
         query = query
           .eq("chave_id", chaveId)
           .order("created_at", { ascending: false })
-          .limit(3);
+          .limit(10);
       } else if (type === "timeline") {
         query = query
           .eq("event_id", eventId)
           .eq("shared_to_event", true)
           .order("compartilhado_em", { ascending: false })
-          .limit(3);
+          .limit(10);
       }
 
       const { data, error } = await query;
-      if (!error && data) setMedias(data);
+      if (error || !data) return;
+
+      // 🔍 Filtro: apenas imagens (extensões conhecidas)
+      const imageExtensions = ["jpg", "jpeg", "png", "webp", "gif", "avif"];
+      const onlyImages = data.filter((m) => {
+        const ext = (m.type || "").toLowerCase().trim();
+        return imageExtensions.includes(ext);
+      });
+
+      // 🔹 Mantém no máximo 3 imagens
+      setMedias(onlyImages.slice(0, 3));
     };
 
     if (!coverImageUrl) fetchMedias();
@@ -98,28 +108,15 @@ const MemoryCard = ({ title, type, eventId, chaveId, onClick, coverImageUrl }) =
           />
         ) : medias.length > 0 ? (
           medias.map((media, i) => (
-            <div key={i} className="flex-1 relative h-full">
-              {media.type === "video" ? (
-                <video
-                  src={media.file_url}
-                  className="w-full h-full object-cover"
-                  playsInline
-                  muted
-                  loop
-                  autoPlay
-                  style={{ aspectRatio: "auto" }}
-                />
-              ) : (
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    backgroundImage: `url(${media.file_url})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                />
-              )}
-            </div>
+            <div
+              key={i}
+              className="flex-1 relative h-full"
+              style={{
+                backgroundImage: `url(${media.file_url})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
           ))
         ) : (
           <div className="absolute inset-0 bg-card">
@@ -165,6 +162,7 @@ const MemoriasPage = () => {
 
       try {
         let mainChave = null;
+
         if (chaveSelecionada) {
           const { data, error } = await supabase
             .from("chaves")
