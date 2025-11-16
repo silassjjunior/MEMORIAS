@@ -176,7 +176,7 @@ const Feed = ({ tipo }) => {
         >
           {memories.map((memorie) => {
             const liked = memorie.likes?.some((like) => like.user_id === user?.id)
-            const isVideo = memorie.file_url.match(/\.(mp4|webm|ogg)$/i)
+            const isVideo = memorie.file_url.match(/\.(mp4|mov|webm|ogg)$/i)
 
             const aspectClass =
               memorie.aspect === "horizontal"
