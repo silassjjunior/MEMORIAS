@@ -13,7 +13,15 @@ export default function LandingPage() {
           <div className="flex items-center gap-3">
             <img src="/favicon.ico" alt="logo" className="w-10 h-10 rounded-lg" />
             <h1 className="text-xl font-semibold tracking-wide">MEMORIAS</h1>
+
           </div>
+
+          <Link 
+            to="/login"
+            className="px-10 py-4 bg-cyan-400/90 hover:bg-cyan-300 text-black font-semibold rounded-2xl shadow-lg shadow-cyan-500/20 transition"
+          >
+            Entrar
+          </Link>
 
           <nav className="hidden md:flex gap-10 text-sm opacity-90">
             <a href="#como" className="hover:text-cyan-300 transition">Como funciona</a>
