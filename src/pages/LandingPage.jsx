@@ -16,6 +16,12 @@ export default function LandingPage() {
 
           </div>
 
+          <nav className="hidden md:flex gap-10 text-sm opacity-90">
+            <a href="#como" className="hover:text-cyan-300 transition">Como funciona</a>
+            <a href="#trofeu" className="hover:text-cyan-300 transition">Troféu Digital</a>
+            <a href="#piloto" className="hover:text-cyan-300 transition">Eventos Piloto</a>
+          </nav>
+
           <Link 
             to="/login"
             className="px-10 py-4 bg-cyan-400/90 hover:bg-cyan-300 text-black font-semibold rounded-2xl shadow-lg shadow-cyan-500/20 transition"
@@ -23,11 +29,6 @@ export default function LandingPage() {
             Entrar
           </Link>
 
-          <nav className="hidden md:flex gap-10 text-sm opacity-90">
-            <a href="#como" className="hover:text-cyan-300 transition">Como funciona</a>
-            <a href="#trofeu" className="hover:text-cyan-300 transition">Troféu Digital</a>
-            <a href="#piloto" className="hover:text-cyan-300 transition">Eventos Piloto</a>
-          </nav>
         </div>
       </header>
 
