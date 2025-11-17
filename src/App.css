@@ -186,3 +186,12 @@
     transform: translateY(-10px);
   }
 }
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 150, 150, 0.6); }
+  50% { box-shadow: 0 0 18px rgba(255, 200, 120, 0.9); }
+}
+
+.glow-ring {
+  animation: glow-pulse 2.6s infinite ease-in-out;
+}
