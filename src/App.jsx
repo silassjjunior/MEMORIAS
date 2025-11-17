@@ -26,6 +26,7 @@ import CuradoriaPage from '@/pages/CuradoriaPage'
 import SuasMemorias from './pages/SuasMemorias'
 import AdminPecasPage from './pages/AdminPecasPage'
 import LojaPecasPage from './pages/LojaPecasPage'
+import LandingPage from '@/pages/LandingPage'
 
 import { URLS } from '@/constants'
 import './App.css'
@@ -59,6 +60,7 @@ const AppRoutes = () => (
     {/* Rotas públicas */}
     <Route path={URLS.login} element={<LoginPage />} />
     <Route path={URLS.cadastro || "/cadastro"} element={<CadastroPage />} /> {/* nova rota pública */}
+    <Route path={URLS.LandingPage} element={<LandingPage />} />
 
     {/* Rotas protegidas */}
     <Route

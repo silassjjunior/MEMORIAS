@@ -16,6 +16,7 @@ export const APP_CONFIG = {
 export const URLS = {
   home: '/',
   login: '/login',
+  LandingPage: '/LandingPage',
   dashboard: '/dashboard',
   NovaChave: '/NovaChave',
   NovoEvento: '/NovoEvento', 
