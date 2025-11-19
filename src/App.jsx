@@ -257,8 +257,8 @@ const AppRoutes = () => (
     />
 
     {/* Redirecionamentos */}
-    <Route path="/" element={<Navigate to={URLS.dashboard} replace />} />
-    <Route path="*" element={<Navigate to={URLS.dashboard} replace />} />
+    <Route path="/" element={<Navigate to={URLS.LandingPage} replace />} />
+    <Route path="*" element={<Navigate to={URLS.LandingPage} replace />} />
   </Routes>
 )
 
