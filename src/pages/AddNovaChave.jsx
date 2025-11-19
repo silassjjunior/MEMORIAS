@@ -116,7 +116,7 @@ const AddNovaChave = () => {
         return
       }
 
-      const serial_number = `${event.event_code_prefix}${event.key_count + 1}`
+      const serial_number = `${event.event_code_prefix}#${event.key_count + 1}`
 
       const { error: chaveError } = await supabase.from('chaves').insert([
         {
