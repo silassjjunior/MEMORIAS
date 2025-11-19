@@ -436,7 +436,7 @@ export default function CommercialSite() {
               onClick={() => trackEvent("cta_click", { location: "navbar", label: "Comece Agora" })}
               className="ml-4 px-4 py-2 rounded-xl bg-cyan-400 text-black font-semibold shadow"
             >
-              Comece Agora
+              Entrar
             </Link>
           </nav>
 
@@ -446,7 +446,7 @@ export default function CommercialSite() {
               onClick={() => trackEvent("cta_click", { location: "navbar_mobile", label: "Comece" })}
               className="px-3 py-2 rounded-lg bg-cyan-400 text-black font-semibold text-sm"
             >
-              Comece
+              Entrar
             </Link>
           </div>
         </div>
@@ -467,7 +467,7 @@ export default function CommercialSite() {
               transition={{ duration: 0.6 }}
               className="text-4xl md:text-5xl font-bold leading-tight"
             >
-              MEMORIAS — <span className="text-cyan-300">A Experiência</span> que transforma seu evento em história
+              Transforme seus <span className="text-cyan-300">Eventos</span>  em uma experiência digital que vive para sempre. 
             </motion.h1>
 
             <motion.p
@@ -476,8 +476,8 @@ export default function CommercialSite() {
               transition={{ delay: 0.15 }}
               className=" text-lg text-gray-200 max-w-2xl"
             >
-              Veja como eventos reais se transformam em memórias vivas dentro do MEMORIAS.
-              Um novo padrão para convidados, organizadores e criadores — privacidade, design e valor em um só lugar.
+             Crie um espaço único para o seu evento, onde cada convidado pode registrar suas fotos, compartilhar memórias e participar de um feed colaborativo.
+             Como organizador, você ainda conta com um ambiente exclusivo para revelar conteúdos especiais a todos.
             </motion.p>
 
             {/* CARROSSEL DE EVENTOS (HERO) */}
@@ -489,16 +489,18 @@ export default function CommercialSite() {
         <section id="organizador" className="py-1 px-6 bg-[#071018]">
           <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
-              <h3 className="text-2xl font-bold">Para Organizadores</h3>
+              <h3 className="text-2xl font-bold">O novo padrão de lembrança para eventos inesquecíveis.</h3>
               <p className="mt-4 text-gray-300">
-                Aumente o valor percebido dos seus eventos — entregue uma experiência digital exclusiva aos seus clientes
-                e centralize todas as memórias sem complicação.
+               MEMORIAS é a evolução das lembranças de eventos: uma chave personalizada que não só identifica o seu evento, ela guarda cada foto, memória e interação de todos que estiveram lá.
+               É a lembrança que faz sentido hoje: útil, bonita, interativa e eterna.
               </p>
 
               <ul className="mt-4 space-y-2 text-gray-300">
-                <li>• QR Code no convite — convidados enviam fotos em segundos</li>
-                <li>• Centralização automática do material</li>
-                <li>• Troféus digitais para agregar valor ao pacote</li>
+                <li>• Memórias organizadas automaticamente — convidados enviam fotos em segundos</li>
+                <li>• Feed colaborativo e divertido</li>
+                <li>• Adicione o codigo no convite e conceda Acesso Antecipado ao conteudo</li>
+                <li>• Forneça um Colecionavel exclusivo para os participantes</li>
+                <li>• Painel exclusivo do organizador</li>
               </ul>
 
               <div className="mt-6">
@@ -513,8 +515,8 @@ export default function CommercialSite() {
             </div>
 
             <div className="p-6 bg-white/4 rounded-2xl border border-white/6">
-              <div className="text-sm text-gray-200 font-medium">Case rápido</div>
-              <div className="mt-3 text-gray-100">“Evento X reduziu o tempo de coleta de fotos em 70% e aumentou o engajamento dos convidados.”</div>
+              <div className="text-sm text-gray-200 font-medium">"Se copos, pulseiras e tirantes foram a lembranças no passado… Memorias são as Lembranças do Futuro."</div>
+              <div className="mt-3 text-gray-100"> - Famoso NorT, Produtor de Eventos</div>
             </div>
           </div>
         </section>
