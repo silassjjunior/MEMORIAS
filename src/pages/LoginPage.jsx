@@ -55,7 +55,7 @@ export default function LoginPage() {
       if (!data?.user) throw new Error("Usuário não encontrado.");
 
       // Login bem-sucedido
-      navigate("/home");
+      navigate("/Dashboard");
     } catch (err) {
       console.error("Erro no login:", err);
       setError(err?.message || "Erro inesperado. Tente novamente.");
