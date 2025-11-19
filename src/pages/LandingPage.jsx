@@ -552,7 +552,7 @@ export default function CommercialSite() {
 
 
 
-      <div className="flex gap-4 text-sm text-gray-500">
+      <div className="flex gap-2 text-sm text-gray-500">
         © {new Date().getFullYear()} MEMORIAS
         <div className=" text-sm text-gray-400">
           <Link to="/Termos" className="hover:text-cyan-300 transition">Termos</Link>
