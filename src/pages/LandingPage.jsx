@@ -538,21 +538,33 @@ export default function CommercialSite() {
         </section>
 
         {/* FOOTER */}
-        <footer className="py-10 border-t border-white/6 text-center">
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="flex items-center gap-3">
-                <img src="/favicon.ico" alt="logo" className="w-10 h-10 rounded-md" />
-                <div>
-                  <div className="font-semibold">MEMORIAS</div>
-                  <div className="text-sm text-gray-400">Transforme a forma como você coleciona memórias</div>
-                </div>
-              </div>
+<footer className="py-10 border-t border-white/6 text-center">
+  <div className="max-w-6xl mx-auto px-6">
+    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
 
-              <div className="text-sm text-gray-400">© {new Date().getFullYear()} MEMORIAS · Termos · Privacidade · Contato</div>
-            </div>
-          </div>
-        </footer>
+      <div className="flex items-center gap-3">
+        <img src="/favicon.ico" alt="logo" className="w-10 h-10 rounded-md" />
+        <div>
+          <div className="font-semibold">MEMORIAS</div>
+          <div className="text-sm text-gray-400">Transforme a forma como você coleciona memórias</div>
+        </div>
+      </div>
+
+
+
+      <div className="flex gap-4 text-sm text-gray-500">
+        © {new Date().getFullYear()} MEMORIAS
+        <div className=" text-sm text-gray-400">
+          <Link to="/Termos" className="hover:text-cyan-300 transition">Termos</Link>
+          <span> · </span>
+          <Link to="/Privacidade" className="hover:text-cyan-300 transition">Privacidade</Link>
+          <span> · </span>
+          <Link to="/Contato" className="hover:text-cyan-300 transition">Contato</Link>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
       </main>
     </div>
   );

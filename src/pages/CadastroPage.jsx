@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { Link } from "react-router-dom";
 
 // Schema de validação com Zod
 const cadastroSchema = z.object({
@@ -173,7 +174,16 @@ export default function CadastroPage() {
             Faça login
           </span>
         </p>
-      </form>
+        {/* Links de Termos, Privacidade e Contato */}
+                  <div className=" text-center text-sm text-gray-400">
+                    <Link to="/Termos" className="hover:text-cyan-300 transition">Termos</Link>
+                    <span> · </span>
+                    <Link to="/Privacidade" className="hover:text-cyan-300 transition">Privacidade</Link>
+                    <span> · </span>
+                    <Link to="/Contato" className="hover:text-cyan-300 transition">Contato</Link>
+                  </div>
+      </form>           
     </div>
+    
   )
 }

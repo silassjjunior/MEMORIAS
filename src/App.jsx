@@ -27,6 +27,9 @@ import SuasMemorias from './pages/SuasMemorias'
 import AdminPecasPage from './pages/AdminPecasPage'
 import LojaPecasPage from './pages/LojaPecasPage'
 import LandingPage from '@/pages/LandingPage'
+import Termos from '@/pages/Termos'
+import Privacidade from '@/pages/Privacidade'
+import Contato from '@/pages/Contato'
 
 import { URLS } from '@/constants'
 import './App.css'
@@ -61,6 +64,9 @@ const AppRoutes = () => (
     <Route path={URLS.login} element={<LoginPage />} />
     <Route path={URLS.cadastro || "/cadastro"} element={<CadastroPage />} /> {/* nova rota pública */}
     <Route path={URLS.LandingPage} element={<LandingPage />} />
+    <Route path="/Termos" element={<Termos />} />
+    <Route path="/Privacidade" element={<Privacidade />} />
+    <Route path="/Contato" element={<Contato />} />
 
     {/* Rotas protegidas */}
     <Route
