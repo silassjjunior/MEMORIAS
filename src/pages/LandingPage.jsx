@@ -427,10 +427,6 @@ export default function CommercialSite() {
 
           <nav className="hidden md:flex gap-8 items-center text-sm opacity-90" aria-label="Main navigation">
             <a href="#home" onClick={(e) => handleNav(e, "home")} className="hover:text-cyan-300">Home</a>
-            <a href="#organizador" onClick={(e) => handleNav(e, "organizador")} className="hover:text-cyan-300">Organizadores</a>
-            <a href="#fotografo" onClick={(e) => handleNav(e, "fotografo")} className="hover:text-cyan-300">Fotógrafos</a>
-            <a href="#buffet" onClick={(e) => handleNav(e, "buffet")} className="hover:text-cyan-300">Buffets</a>
-            <a href="#criador" onClick={(e) => handleNav(e, "criador")} className="hover:text-cyan-300">Criadores</a>
             <Link
               to="/login"
               onClick={() => trackEvent("cta_click", { location: "navbar", label: "Comece Agora" })}
@@ -460,7 +456,7 @@ export default function CommercialSite() {
             <div className="w-[600px] h-[600px] bg-purple-600/8 blur-[160px] rounded-full -right-36 bottom-10 absolute" />
           </div>
 
-          <div className="max-w-6xl mx-auto px-6 py-18 relative z-10 text-center md:text-left">
+          <div className="max-w-6xl mx-auto px-6 py-6 relative z-10 text-center md:text-left">
             <motion.h1
               initial={{ y: 12, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -474,7 +470,7 @@ export default function CommercialSite() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.15 }}
-              className=" text-lg text-gray-200 max-w-2xl"
+              className=" py-6 text-lg text-gray-200 max-w-2xl"
             >
              Crie um espaço único para o seu evento, onde cada convidado pode registrar suas fotos, compartilhar memórias e participar de um feed colaborativo.
              Como organizador, você ainda conta com um ambiente exclusivo para revelar conteúdos especiais a todos.
@@ -521,98 +517,7 @@ export default function CommercialSite() {
           </div>
         </section>
 
-        {/* FOTÓGRAFOS */}
-        <section id="fotografo" className="py-10 px-6 border-t border-white/6">
-          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div className="order-2 md:order-1">
-              <div className="p-6 bg-white/4 rounded-2xl border border-white/6">
-                <div className="text-sm text-gray-200 font-medium">Vantagem</div>
-                <div className="mt-3 text-gray-100">Entregue ao cliente um produto final completo com todas as fotos reunidas.</div>
-              </div>
-            </div>
-
-            <div className="order-1 md:order-2">
-              <h3 className="text-2xl font-bold">Para Fotógrafos</h3>
-              <p className="mt-4 text-gray-300">Integre seu fluxo e ofereça ao cliente um pacote moderno: troféu digital + galeria privada.</p>
-
-              <ul className="mt-4 space-y-2 text-gray-300">
-                <li>• Material organizado por evento</li>
-                <li>• Exposição do portfólio dentro da plataforma</li>
-                <li>• Oportunidade de ganhar indicações</li>
-              </ul>
-
-              <div className="mt-6">
-                <Link
-                  to="/login"
-                  onClick={() => trackEvent("cta_click", { location: "fotografo", label: "Quero usar" })}
-                  className="px-6 py-3 rounded-2xl bg-cyan-400 text-black font-semibold"
-                >
-                  Quero usar no meu próximo evento
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* BUFFETS */}
-        <section id="buffet" className="py-10 px-6 bg-[#071018]">
-          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h3 className="text-2xl font-bold">Para Buffets e Casas de Festa</h3>
-              <p className="mt-4 text-gray-300">Destaque sua casa com um diferencial digital que encanta no pós-evento.</p>
-
-              <ul className="mt-4 space-y-2 text-gray-300">
-                <li>• Aumente o ticket médio com um serviço diferenciado</li>
-                <li>• Conteúdo pronto para redes sociais</li>
-              </ul>
-
-              <div className="mt-6">
-                <Link
-                  to="/login"
-                  onClick={() => trackEvent("cta_click", { location: "buffet", label: "Começar Agora" })}
-                  className="px-6 py-3 rounded-2xl bg-cyan-400 text-black font-semibold"
-                >
-                  Começar Agora
-                </Link>
-              </div>
-            </div>
-
-            <div className="p-6 bg-white/4 rounded-2xl border border-white/6">
-              <div className="text-sm text-gray-200 font-medium">Exemplo</div>
-              <div className="mt-3 text-gray-100">“Casa Y aumentou reservas em eventos corporativos.”</div>
-            </div>
-          </div>
-        </section>
-
-        {/* CRIADORES */}
-        <section id="criador" className="py-10 px-6 border-t border-white/6">
-          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h3 className="text-2xl font-bold">Para Criadores de Conteúdo</h3>
-              <p className="mt-4 text-gray-300">Monetize momentos exclusivos e entregue troféus colecionáveis para sua comunidade.</p>
-
-              <ul className="mt-4 space-y-2 text-gray-300">
-                <li>• Conteúdo exclusivo para fãs</li>
-                <li>• Experiências monetizáveis via troféus</li>
-              </ul>
-
-              <div className="mt-6">
-                <Link
-                  to="/login"
-                  onClick={() => trackEvent("cta_click", { location: "criador", label: "Quero ativar" })}
-                  className="px-6 py-3 rounded-2xl bg-cyan-400 text-black font-semibold"
-                >
-                  Quero ativar no meu evento
-                </Link>
-              </div>
-            </div>
-
-            <div className="p-6 bg-white/4 rounded-2xl border border-white/6">
-              <div className="text-sm text-gray-200 font-medium">Oportunidade</div>
-              <div className="mt-3 text-gray-100">“Criador Z lançou troféus exclusivos — fãs pagaram e engajamento subiu 3x.”</div>
-            </div>
-          </div>
-        </section>
+      
 
         {/* CTA FINAL */}
         <section className="py-10 px-6 bg-gradient-to-tr from-cyan-900/30 to-transparent">
