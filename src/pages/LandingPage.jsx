@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabase";
    CONFIGURAÇÃO DE EVENTOS
    ============================ */
 const DEMO_IDS = [
-  "1de3c32b-7787-4c74-aa89-8bf352037dc8",
+  "5b6728b8-c89f-43c6-bffd-522163ea3799",
   "b0bd57e2-d790-4dda-8a11-ccb4216687ad",
   "128c526f-e1f9-4d9a-a8f2-e13fdd31a6c8",
   "a8cb340c-132f-4283-b1f3-45cf7670d63d",
