@@ -352,9 +352,20 @@ export default function NovoEvento() {
 
         {/* Lista de peças */}
         <div className="flex overflow-x-auto gap-3 mb-6 py-2">
-          {(pecas || [])
-            .filter((p) => p.camada === selectedLayer)
-            .map((peca) => {
+          {
+          
+          (pecas || [])
+  .filter((p) => p.camada === selectedLayer)
+  .filter((p) => {
+    const rec = userPecas.find(
+      (u) => String(u.peca_id) === String(p.id)
+    );
+    return rec && rec.quantidade > 0; // só mostra quem o usuário possui
+  })
+  .map((peca) => {
+
+
+
               const rec = userPecas.find(
                 (u) => String(u.peca_id) === String(peca.id)
               );
